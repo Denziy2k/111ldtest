@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Слово в слово</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff;--fg:#4b4b4b;--card:#fff;--ac:#58cc02;--acs:#58a700;--bl:#1cb0f6;--ok:#58a700;--bad:#ea2b2b;--mut:#afafaf;--line:#e5e5e5;--okbg:#d7ffb8;--badbg:#ffdfe0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#131f24;--fg:#f1f7fb;--card:#131f24;--mut:#6b7c86;--line:#37464f;--okbg:#1d3a14;--badbg:#3d1a1c;--ok:#89e219;--bad:#ff7878}}
+:root[data-theme="dark"]{--bg:#131f24;--fg:#f1f7fb;--card:#131f24;--mut:#6b7c86;--line:#37464f;--okbg:#1d3a14;--badbg:#3d1a1c;--ok:#89e219;--bad:#ff7878}
+html,body{margin:0;min-height:100%;background:var(--bg);color:var(--fg);font-family:Nunito,system-ui,-apple-system,"Segoe UI",sans-serif;font-weight:700}
+main{max-width:440px;margin:0 auto;padding:16px 18px 28px;text-align:center}
+.card{background:none;padding:0;box-shadow:none}
+h1{font-size:30px;font-weight:900;color:var(--ac);margin:8px 0 6px}
+.hero{font-size:84px;margin-top:40px}
+.m{color:var(--mut);font-size:16px;margin:4px 0 18px;line-height:1.4}
+button{font:inherit;border:0;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.big{width:100%;padding:15px;border-radius:16px;font-size:17px;font-weight:900;letter-spacing:.8px;text-transform:uppercase;color:#fff;background:var(--ac);margin-top:12px;box-shadow:0 4px 0 var(--acs)}
+.big:active{transform:translateY(4px);box-shadow:none}
+.big.sec{background:var(--card);color:var(--bl);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.big.sec:active{box-shadow:none}
+.big:disabled{background:var(--line);color:var(--mut);box-shadow:none;transform:none;cursor:default}
+.bar{height:16px;background:var(--line);border-radius:9px;overflow:hidden;margin:6px 0 4px}
+.bar i{display:block;height:100%;background:var(--ac);border-radius:9px;transition:width .4s;box-shadow:inset 0 5px 0 rgba(255,255,255,.25)}
+.word{font-size:44px;font-weight:900;margin:50px 0 60px;word-break:break-word;color:var(--fg)}
+.ans{min-height:70px;display:flex;flex-wrap:wrap;justify-content:center;gap:6px;align-items:center;padding:10px 0;border-top:2px solid var(--line);border-bottom:2px solid var(--line);margin:18px 0 22px}
+.ans span{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:6px 12px;font-size:26px;font-weight:900;box-shadow:0 3px 0 var(--line)}
+.ans .g{width:14px;border:0;box-shadow:none;background:none;padding:0}
+.ans.ok span{border-color:var(--ac);color:var(--ok);box-shadow:0 3px 0 var(--acs)}
+.ans.bad span{border-color:var(--bad);color:var(--bad);box-shadow:0 3px 0 var(--bad)}
+.ph{color:var(--mut);font-size:17px}
+.kb{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin-bottom:10px}
+.k{min-width:54px;padding:12px 0;border-radius:14px;background:var(--card);color:var(--fg);font-size:24px;font-weight:900;border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.k:active{transform:translateY(4px);box-shadow:none}
+.k.w2{min-width:130px;font-size:16px}
+.row{display:flex;gap:10px}.row button{flex:1}
+.snd{background:var(--bl);color:#fff;width:60px;height:60px;border-radius:50%;font-size:26px;box-shadow:0 4px 0 #1899d6;margin:14px 0 0}
+.snd:disabled{opacity:.4;box-shadow:none;cursor:default}.snd:active{transform:translateY(4px);box-shadow:none}
+.fb{font-size:19px;font-weight:900;margin:0 0 10px;min-height:0;padding:0;border-radius:14px}
+.fb.ok{color:var(--ok);background:var(--okbg);padding:12px}.fb.bad{color:var(--bad);background:var(--badbg);padding:12px}
+.sc{font-size:56px;font-weight:900;margin:6px 0;color:var(--ac)}
+ul{list-style:none;padding:0;text-align:left;margin:0 0 8px}
+li{padding:11px 6px;border-bottom:2px solid var(--line);font-size:20px}
+.hero{font-size:56px;margin-top:8px}
+.lvs{display:grid;gap:8px;margin-bottom:8px}
+.lv{text-align:left;background:var(--card);color:var(--fg);border:2px solid var(--line);border-radius:16px;padding:11px 14px;box-shadow:0 3px 0 var(--line)}
+.lv b{display:block;font-size:18px;font-weight:900}.lv span{font-size:14px;color:var(--mut)}
+.lv.on{border-color:var(--bl);background:rgba(28,176,246,.12);box-shadow:0 3px 0 var(--bl)}
+.inp{width:100%;box-sizing:border-box;padding:14px;border:2px solid var(--line);border-radius:14px;font:inherit;background:var(--card);color:var(--fg);margin:14px 0 6px}
+.hint{border:2px solid var(--line);border-radius:16px;padding:16px;font-size:22px;margin:22px 0;line-height:1.3}
+.hint small{display:block;color:var(--mut);font-size:14px;margin-bottom:4px}
+.peek{background:none;color:var(--bl);font-size:16px;margin-top:12px}
+.pk{font-size:28px;min-height:38px;margin:6px 0 0}
+.snd{width:84px;height:84px;font-size:38px}
+li .m{margin:0;font-size:15px}li{cursor:pointer}
+.hero{font-size:56px;margin-top:8px}
+.lvs{display:grid;gap:8px;margin-bottom:8px}
+.lv{text-align:left;background:var(--card);color:var(--fg);border:2px solid var(--line);border-radius:16px;padding:11px 14px;box-shadow:0 3px 0 var(--line)}
+.lv b{display:block;font-size:18px;font-weight:900}.lv span{font-size:14px;color:var(--mut)}
+.lv.on{border-color:var(--bl);background:rgba(28,176,246,.12);box-shadow:0 3px 0 var(--bl)}
+.inp{width:100%;box-sizing:border-box;padding:14px;border:2px solid var(--line);border-radius:14px;font:inherit;background:var(--card);color:var(--fg);margin:14px 0 6px}
+.hint{border:2px solid var(--line);border-radius:16px;padding:16px;font-size:22px;margin:22px 0;line-height:1.3}
+.hint small{display:block;color:var(--mut);font-size:14px;margin-bottom:4px}
+.peek{background:none;color:var(--bl);font-size:16px;margin-top:12px}
+.pk{font-size:28px;min-height:38px;margin:6px 0 0}
+.snd{width:84px;height:84px;font-size:38px}.snd:disabled{opacity:.4;box-shadow:none;cursor:default}
+li .m{margin:0;font-size:15px}li{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.snd.sp{width:44px;height:44px;font-size:20px;margin:0;flex:none}
+.chips{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:2px 0 6px}
+.chips span{background:var(--card);border:2px solid var(--line);border-radius:12px;padding:4px 10px;font-size:14px;font-weight:900}
+.tabs{display:flex;gap:8px;margin:8px 0 6px}
+.tabs button{flex:1;padding:10px;border-radius:12px;background:var(--card);border:2px solid var(--line);color:var(--fg);font-weight:900}
+.tabs .on{border-color:var(--bl);color:var(--bl)}
+.rk{display:flex;gap:10px;align-items:center;padding:11px 8px;border-bottom:2px solid var(--line);text-align:left;font-size:18px}
+.rk b{width:34px;text-align:center}.rk span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rk.me{background:rgba(28,176,246,.12);border-radius:12px}
+</style></head><body><main id="app"></main>
+<script>
+const TG=window.Telegram&&Telegram.WebApp,INIT=TG?TG.initData:'';
+if(TG){try{TG.ready();TG.expand();if(TG.colorScheme)document.documentElement.dataset.theme=TG.colorScheme;}catch(e){}}
+const app=document.getElementById('app');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const LV=[{n:'Лёгкий',e:'🌱',p:1,d:'Слово можно смотреть сколько угодно'},{n:'Средний',e:'🌿',p:2,d:'Слово видно всего 1 секунду'},{n:'Сложный',e:'🔊',p:3,d:'Только звук, слова не видно'},{n:'Хард',e:'🔥',p:5,d:'Только смысл слова простыми словами'}];
+let lv=0,me={},sid='',q={},ans='',lock=false,DICT=null,cnt=10,last=null;
+const ttsOK=()=>'speechSynthesis' in window&&typeof SpeechSynthesisUtterance!=='undefined';
+let VOICES=[];
+if(ttsOK()){const f=()=>{VOICES=speechSynthesis.getVoices();};f();speechSynthesis.onvoiceschanged=f;}
+function speakWord(word,language){
+ language=language||'ru-RU';if(!ttsOK()||!word)return false;
+ try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(word);u.lang=language;u.rate=0.85;u.pitch=1;
+  const vs=VOICES.length?VOICES:speechSynthesis.getVoices(),L=language.toLowerCase();
+  const c=vs.filter(x=>{const l=x.lang.toLowerCase().replace('_','-');return l.startsWith(L)||l.startsWith(L.slice(0,2));});
+  const sc=x=>(/Google|Natural|Enhanced|Premium|Online|Milena|Yandex|Svetlana|Dmitry|Pavel|Katya|Yuri/i.test(x.name)?2:0)+(x.localService?0:1);
+  const v=c.sort((a,b)=>sc(b)-sc(a))[0];if(v)u.voice=v;speechSynthesis.speak(u);return true;}catch(e){return false;}
+}
+const stopSpeech=()=>{try{if(ttsOK())speechSynthesis.cancel();}catch(e){}};
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]);
+async function api(p,b){
+ const r=await fetch('/api/'+p,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'tma '+INIT},body:JSON.stringify(b||{})});
+ const j=await r.json().catch(()=>({}));
+ if(r.status===403&&j.error==='sub'){gate();throw 0;}
+ if(r.status===401){noTg();throw 0;}
+ return j;
+}
+function fail(e){if(e!==0)err();}
+function err(){app.innerHTML=`<div class="hero" style="margin-top:60px">📡</div><h1>Нет связи</h1><p class="m">Проверь интернет и попробуй снова</p><button class="big" onclick="boot()">Повторить</button>`;}
+function noTg(){app.innerHTML=`<div class="hero" style="margin-top:60px">🤖</div><h1>Открой через Telegram</h1><p class="m">Тест работает только внутри бота</p>`;}
+function gate(){
+ app.innerHTML=`<div class="hero" style="margin-top:50px">🔒</div><h1>Нужна подписка</h1><p class="m">Чтобы играть и попасть в рейтинг, подпишись на канал @cachedmemory</p>
+ <button class="big" onclick="openCh()">📢 Подписаться</button><button class="big sec" onclick="boot()">✅ Я подписался</button>`;
+}
+function openCh(){const u='https://t.me/cachedmemory';TG&&TG.openTelegramLink?TG.openTelegramLink(u):window.open(u,'_blank');}
+async function boot(){
+ if(!INIT)return noTg();
+ app.innerHTML='<p class="m" style="margin-top:90px">Загрузка…</p>';
+ try{me=await api('me');}catch(e){return fail(e);}
+ home();
+}
+function home(){
+ stopSpeech();
+ app.innerHTML=`<div class="chips"><span>🏆 ${me.points}</span><span>${me.rank?'место #'+me.rank:'без места'}</span><span>сегодня ${me.today}/${me.cap}</span></div>
+ <div class="hero">📝</div><h1>Слово в слово</h1><p class="m" style="margin-bottom:10px">Привет, ${esc(me.name)}! Русский язык · 11ЛД<br>Выбери уровень</p>
+ <div class="lvs">${LV.map((l,k)=>`<button class="lv ${k===lv?'on':''}" onclick="lv=${k};home()"><b>${l.e} ${l.n} · +${l.p}</b><span>${l.d}</span></button>`).join('')}</div>
+ <button class="big" onclick="start(10)">Начать</button>
+ <button class="big sec" onclick="start(25)">25 слов</button>
+ <button class="big sec" onclick="start(50)">50 слов</button>
+ <button class="big sec" onclick="rating('all')">🏆 Рейтинг</button>
+ <button class="big sec" onclick="dict()">📖 Словарь</button>`;
+}
+async function start(n){
+ cnt=n;
+ try{const r=await api('start',{level:lv,n});if(r.error)return home();sid=r.sid;}catch(e){return fail(e);}
+ nextQ();
+}
+async function nextQ(){
+ stopSpeech();
+ try{q=await api('question',{sid});}catch(e){return fail(e);}
+ if(q.error)return home();
+ [memo,flash,build,build][lv]();
+}
+function bar(){return `<div class="bar"><i style="width:${q.i/q.n*100}%"></i></div><p class="m" style="margin-bottom:0">${q.i+1} из ${q.n}</p>`;}
+function memo(){app.innerHTML=`${bar()}<div class="word" style="margin-bottom:14px">${esc(q.text)}</div><p class="m" style="margin-bottom:40px">${esc(q.meaning)}</p><button class="big" onclick="build()">Скрыть и писать</button>`;}
+function flash(){app.innerHTML=`${bar()}<p class="m" style="margin-top:28px">Запомни!</p><div class="word">${esc(q.text)}</div>`;setTimeout(build,1000);}
+function build(){
+ ans='';lock=false;
+ const keys=q.letters.map(c=>`<button class="k" onclick="add('${c}')">${c}</button>`).join('')+(q.space?'<button class="k w2" onclick="add(\' \')">пробел</button>':'');
+ const nosnd=lv===2&&!ttsOK();
+ const top=nosnd?`<button class="snd" disabled>🔊</button><div class="hint"><small>Звук не работает здесь, поэтому вот смысл слова</small>${esc(q.meaning)}</div>`
+  :lv===2?`<button class="snd" onclick="say()">🔊</button><p class="m" style="margin:8px 0 0">Послушай и собери слово</p>`
+  :lv===3?`<div class="hint"><small>Что это значит</small>${esc(q.meaning)}</div>`
+  :`<button class="peek" onclick="peek()">👁 Подсмотреть</button><div class="pk" id="pk"></div>`;
+ app.innerHTML=`${bar()}${top}<div class="ans" id="ans"></div><div class="fb" id="fb"></div><div class="kb">${keys}</div>
+ <div class="row"><button class="big sec" onclick="del()">⌫</button><button class="big" style="flex:3" id="chk" disabled onclick="check()">Проверить</button></div><div id="nx"></div>`;
+ draw();if(lv===2&&!nosnd)setTimeout(say,300);
+}
+function peek(){const p=document.getElementById('pk');p.textContent=p.textContent?'':q.text;}
+function say(w){speakWord(w||q.speak,'ru-RU');}
+function draw(cls){
+ const a=document.getElementById('ans');a.className='ans '+(cls||'');
+ const c=document.getElementById('chk');if(c)c.disabled=!ans.trim();
+ a.innerHTML=ans?[...ans].map(c=>c===' '?'<span class="g"></span>':`<span>${c}</span>`).join(''):'<b class="ph">Нажимай на буквы</b>';
+}
+function add(c){if(lock)return;ans+=c;draw();}
+function del(){if(lock)return;ans=ans.slice(0,-1);draw();}
+async function check(){
+ if(lock||!ans.trim())return;lock=true;
+ let r;try{r=await api('answer',{sid,answer:ans.trim()});}catch(e){lock=false;return fail(e);}
+ if(r.error){alert(r.error==='rate'?'Слишком много ответов, подожди минуту':'Сессия закончилась, начни заново');return home();}
+ const fb=document.getElementById('fb'),go=()=>r.done?end(r):nextQ();
+ if(r.correct){draw('ok');fb.className='fb ok';fb.textContent='Верно! 🎉'+(r.pts?' +'+r.pts:'');setTimeout(go,900);}
+ else{draw('bad');fb.className='fb bad';fb.innerHTML=(r.fast?'Слишком быстро, ответ не засчитан<br>':'')+`Правильно: <b>${esc(r.right)}</b>`;
+  window.__go=go;document.getElementById('nx').innerHTML='<button class="big" onclick="__go()">Дальше</button>';}
+}
+async function end(r){
+ last=r;
+ try{me=await api('me');}catch(e){}
+ app.innerHTML=`<div class="hero">${r.ok===r.n?'🏆':'💪'}</div><div class="sc">${r.ok} из ${r.n}</div>
+ <p class="m" style="margin-bottom:4px">Заработано очков: <b>+${r.gained}</b>${r.capped?'<br>Дневной лимит очков достигнут':''}</p>
+ <p class="m">${r.wrong.length?'Слова, в которых были ошибки:':'Без единой ошибки!'}</p>
+ <ul>${r.wrong.map(w=>`<li><div>${esc(w.text)}<br><span class="m">${esc(w.meaning)}</span></div></li>`).join('')}</ul>
+ <button class="big" onclick="start(cnt)">Ещё раз</button><button class="big sec" onclick="rating('all')">🏆 Рейтинг</button><button class="big sec" onclick="home()">В начало</button>`;
+}
+async function rating(tab){
+ let r;try{r=await api('top',{tab});}catch(e){return fail(e);}
+ const med=['🥇','🥈','🥉'];
+ app.innerHTML=`<button class="big sec" onclick="home()">← Назад</button><h1 style="margin-top:14px">🏆 Рейтинг</h1>
+ <div class="tabs"><button class="${tab==='all'?'on':''}" onclick="rating('all')">За всё время</button><button class="${tab==='day'?'on':''}" onclick="rating('day')">Сегодня</button></div>
+ ${r.rows.length?'':'<p class="m">Пока никого нет. Стань первым!</p>'}
+ <div>${r.rows.map((x,k)=>`<div class="rk ${x.me?'me':''}"><b>${med[k]||k+1}</b><span>${esc(x.name)}</span><b style="width:auto">${x.points}</b></div>`).join('')}</div>`;
+}
+async function dict(){
+ if(!DICT){try{DICT=(await api('dictionary')).words;}catch(e){return fail(e);}}
+ app.innerHTML=`<button class="big sec" onclick="home()">← Назад</button><input id="s" class="inp" placeholder="Поиск слова" oninput="fl()"><p class="m" style="margin:0">Нажми 🔊, чтобы услышать слово</p><ul id="dl"></ul>`;fl();
+}
+function fl(){
+ const t=document.getElementById('s').value.toLowerCase();
+ document.getElementById('dl').innerHTML=DICT.map((w,k)=>[w,k]).filter(x=>x[0][0].replace(/\u0301/g,'').includes(t)).map(([w,k])=>
+  `<li><div><b>${esc(w[0])}</b><br><span class="m">${esc(w[1])}</span></div><button class="snd sp" ${ttsOK()?'':'disabled'} onclick="say(DICT[${k}][2])">🔊</button></li>`).join('');
+}
+boot();
+</script></body></html>
